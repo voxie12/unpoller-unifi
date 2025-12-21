@@ -7,8 +7,8 @@ Docker Compose stack for monitoring UniFi networks with UnPoller, Prometheus, an
 1. **Clone and configure**
 
    ```bash
-    git@github.com:timothystewart6/unpoller-unifi.git   
-    cd unpoller-unifi
+    git@github.com:timothystewart6/unpoller-UniFi.git   
+    cd unpoller-UniFi
    ```
 
 2. **Edit UniFi credentials**
@@ -16,10 +16,10 @@ Docker Compose stack for monitoring UniFi networks with UnPoller, Prometheus, an
    Update `unpoller/.env` with your controller details, it's advised to create a dedicated local UniFi account that has read only access to your Network controller:
 
    ```env
-    UP_UNIFI_CONTROLLER_0_URL=https://192.168.10.1
-    UP_UNIFI_CONTROLLER_0_USER=unpoller
-    UP_UNIFI_CONTROLLER_0_PASS=password123
-    UP_UNIFI_CONTROLLER_0_SITE=default
+    UP_UniFi_CONTROLLER_0_URL=https://192.168.10.1
+    UP_UniFi_CONTROLLER_0_USER=unpoller
+    UP_UniFi_CONTROLLER_0_PASS=password123
+    UP_UniFi_CONTROLLER_0_SITE=default
    ```
 
    Update Grafana admin credentials in `grafana/.env`:
@@ -60,7 +60,8 @@ Docker Compose stack for monitoring UniFi networks with UnPoller, Prometheus, an
 
 ## Resources
 
-- **🎥 Video Tutorial**: [UNiFi Observability Done Right (Unpoller + Grafana Walkthrough)](https://www.youtube.com/watch?v=cVCPKTHEnI8)
+- **📖 Detailed Guide**: [UniFi Observability with UnPoller, Prometheus, and Grafana](https://technotim.live/posts/unpoller-unifi-metrics/)
+- **🎥 Video Tutorial**: [UniFi Observability Done Right (Unpoller + Grafana Walkthrough)](https://www.youtube.com/watch?v=cVCPKTHEnI8)
 
 ## Troubleshooting
 
