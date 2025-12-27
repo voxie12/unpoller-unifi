@@ -3,11 +3,9 @@ services:
     image: prom/prometheus:latest
     restart: unless-stopped
     container_name: prometheus
-    user: "${UID:-1000}:${GID:-1000}"
-    env_file:
-      - ./prometheus/.env
+    user: 0:0
     ports:
-      - '9090:9090'
+      - "9090:9090"
     volumes:
       - ./prometheus/config:/etc/prometheus
       - ./prometheus/data:/prometheus
@@ -15,11 +13,14 @@ services:
     image: grafana/grafana:latest
     restart: unless-stopped
     container_name: grafana
-    user: "${UID:-1000}:${GID:-1000}"
-    env_file:
-      - ./grafana/.env
+    user: 0:0
+    environment:
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,natel-discrete-panel,grafana-piechart-panel
+      - GF_SECURITY_ADMIN_USER=jay
+      - GF_SECURITY_ADMIN_PASSWORD=test123
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
       - ./grafana/data:/var/lib/grafana
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
@@ -31,19 +32,36 @@ services:
     image: ghcr.io/unpoller/unpoller:latest
     restart: unless-stopped
     container_name: unpoller
-    env_file:
-      - ./unpoller/.env
     ports:
-      - '9130:9130'
+      - "9130:9130"
+    environment:
+      - UP_INFLUXDB_DISABLE=true
+      - UP_POLLER_DEBUG=false
+      - UP_UNIFI_DYNAMIC=false
+      - UP_PROMETHEUS_HTTP_LISTEN=0.0.0.0:9130
+      - UP_PROMETHEUS_NAMESPACE=unpoller
+      - UP_UNIFI_CONTROLLER_0_VERIFY_SSL=false
+      - UP_UNIFI_CONTROLLER_0_SAVE_ALARMS=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_ANOMALIES=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_EVENTS=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_IDS=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_SITES=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_DPI=false
 
-# optional log viewer for docker containers
+      - UP_UNIFI_CONTROLLER_0_URL=https://10.5.0.1 # change to your Unifi Controller URL
+      - UP_UNIFI_CONTROLLER_0_USER=unpoller # change to your Unifi Controller username
+      - UP_UNIFI_CONTROLLER_0_PASS=test123 # change to your Unifi Controller password
+      - UP_UNIFI_CONTROLLER_0_SITE=default # this is usually 'default', change if needed
+      - TZ=Europe/London # change to your timezone
+
+  # optional log viewer for docker containers
   dozzle:
     image: amir20/dozzle:latest
     restart: unless-stopped
     container_name: dozzle
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    env_file:
-      - ./dozzle/.env
+    environment:
+      - TZ=Europe/London
     ports:
-      - '8080:8080'
+      - "8080:8080"
